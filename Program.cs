@@ -13,7 +13,7 @@ while (ContainsOperator(formula, POSSIBLE_OPERATORS, true))
     // create a list for all operator indices
     List<int> operatorIndices = new List<int>();
 
-    // counting the number of divisions
+    // count the number of divisions
     int numberOfDivisions = 0;
     // loop through formula
     for (int i = 1; i < formula.Length; i++)
@@ -22,11 +22,11 @@ while (ContainsOperator(formula, POSSIBLE_OPERATORS, true))
         // 10--10
         // 2*-10
 
-        // each divison operator-index is added to the front of the list
+        // each divison operator-index is added to the front of the list and the numberOfDivisions is increased by 1
         if (formula[i] == '/') { operatorIndices.Insert(0, i); i++; numberOfDivisions++; }
         // each multiplication operator-index is added inbetween the divisions and additions/subractions (to avoid mistakes like: 10 / 5 * 2 = 10 / 10 = 1)
         else if (formula[i] == '*') { operatorIndices.Insert(numberOfDivisions, i); i++; }
-        // each addition or subtraction operator-index is added to the end of the list
+        // each addition/subtraction operator-index is added to the end of the list
         else if (formula[i] is '+' or '-') { operatorIndices.Add(i); i++; }
     }
 
@@ -48,10 +48,10 @@ while (ContainsOperator(formula, POSSIBLE_OPERATORS, true))
         }
     }
 
-    // evaluating the result and passing the term/substring (from the operator on the left - to the operator from the right) as the parameter
+    // evaluating the result and passing the term/substring (from the operator on the left to the operator from the right) as the parameter
     double result = EvaluateTerm(formula.Substring(leftOperatorIndex, rightOperatorIndex - leftOperatorIndex));
 
-    // substituting the term/substring (from the operator on the left - to the operator from the right) with the evaluted result
+    // substituting the term/substring (from the operator on the left to the operator from the right) with the evaluted result
     formula = $"{formula.Substring(0, leftOperatorIndex)}{result}{formula.Substring(rightOperatorIndex)}";
 }
 
@@ -95,15 +95,15 @@ double EvaluateTerm(string term)
     return result;
 }
 
-// method to check if a text contains given characters
+// method to check if a string contains given operators
 bool ContainsOperator(string @string, string possibleOperators, bool ignoreFirstChar)
 {
     // loop thorugh text starting from...
     // 1 if first character should be ignored
-    // 0 if first character should be included
+    // 0 if first character shouldn't be ignored
     for (int i = ignoreFirstChar ? 1 : 0; i < @string.Length; i++)
     {
-        // if the current character is contained in the possible characters, true is returned
+        // if the current character is contained in the given operators, true is returned
         if (possibleOperators.Contains(@string[i])) { return true; }
     }
 
